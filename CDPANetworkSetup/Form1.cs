@@ -308,28 +308,25 @@ namespace CDPANetworkSetup
             if (result == DialogResult.Yes)
             {
                 var success = NetworkUtils.SaveIPSettings(currentIf, settings);
-                setStatus(success ? "儲存成功" : "儲存失敗");
-            }
-
-
-            if (NetworkUtils.IsDHCPEnabled(currentIf))
-            {
-                result = MessageBox.Show("偵測到 DHCP 尚未停用，若不停用 DHCP 則 IP 設定無法生效。\r\n是否停用 DHCP ？", "停用 DHCP", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-                if (result == DialogResult.Yes)
+                if (success)
                 {
-                    NetworkUtils.setDHCPEnabled(currentIf, false);
+                    setStatus("儲存成功");
+                }
+                else
+                {
+                    UpdateIPSetupField();
+                    setStatus("儲存失敗");
                 }
             }
+            
+        }
 
-            result = MessageBox.Show("必須重新啟用介面卡才能使設定立即生效。\r\n是否重新啟用介面卡？", "重新啟用介面卡", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-            if (result == DialogResult.Yes)
+        private void textBoxesInIPSetup_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
             {
-                currentIf.InvokeMethod("Disable", null);
-                currentIf.InvokeMethod("Enable", null);
+                e.Handled = true;
             }
-
-            UpdateIPSetupField();
         }
     }
 }

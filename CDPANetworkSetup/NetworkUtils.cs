@@ -80,46 +80,49 @@ namespace CDPANetworkSetup
 
         public static bool SaveIPSettings(ManagementObject networkIf, Dictionary<string, string> settings)
         {
-            RegistryKey ipReg = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\" + networkIf["GUID"].ToString(), true);
-            if (settings["IPAddress"] != "" && IsValidIP(settings["IPAddress"]))
+            var wqlQuery = new WqlObjectQuery("SELECT * FROM win32_NetworkAdapterConfiguration WHERE InterfaceIndex=" + networkIf["InterfaceIndex"]);
+            var ifCollection = (new ManagementObjectSearcher(wqlQuery)).Get();
+            if (ifCollection.Count != 1)
             {
-                ipReg.SetValue("IPAddress", new string[1] { settings["IPAddress"] }, RegistryValueKind.MultiString);
-            }
-            if (settings["SubnetMask"] != "" && IsValidIP(settings["SubnetMask"]))
-            {
-                ipReg.SetValue("SubnetMask", new string[1] { settings["SubnetMask"] }, RegistryValueKind.MultiString);
-            }
-            if (settings["DefaultGateway"] != "" && IsValidIP(settings["DefaultGateway"]))
-            {
-                ipReg.SetValue("DefaultGateway", new string[1] { settings["DefaultGateway"] }, RegistryValueKind.MultiString);
+                return false;
             }
 
-            var ns = settings["NameServer"].Split(',');
-            if (IsValidIP(ns[0]) && IsValidIP(ns[1]))
+            foreach (ManagementObject ifConfObj in ifCollection)
             {
-                ipReg.SetValue("NameServer", settings["NameServer"], RegistryValueKind.String);
+                if (settings["IPAddress"] != "" && IsValidIP(settings["IPAddress"])
+                    && settings["SubnetMask"] != "" && IsValidIP(settings["SubnetMask"]))
+                {
+                    var result = ifConfObj.InvokeMethod("EnableStatic", new object[2] { new string[1] { settings["IPAddress"] }, new string[1] { settings["SubnetMask"] } });
+                    if ((uint)result != 0)
+                    {
+                        System.Diagnostics.Debug.WriteLine("InvokeMethod EnableStatic returned with value" + result.ToString());
+                        return false;
+                    }
+                }
+
+                if (settings["DefaultGateway"] != "" && IsValidIP(settings["DefaultGateway"]))
+                {
+                    var result = ifConfObj.InvokeMethod("SetGateways", new object[1] { new string[1] { settings["DefaultGateway"] } });
+                    if ((uint)result != 0)
+                    {
+                        System.Diagnostics.Debug.WriteLine("InvokeMethod SetGateways returned with value" + result.ToString());
+                        return false;
+                    }
+                }
+
+                var ns = settings["NameServer"].Split(',');
+                if (IsValidIP(ns[0]) && IsValidIP(ns[1]))
+                {
+                    var result = ifConfObj.InvokeMethod("SetDNSServerSearchOrder", new object[1] { ns });
+                    if ((uint)result != 0)
+                    {
+                        System.Diagnostics.Debug.WriteLine("InvokeMethod SetDNSServerSearchOrder returned with value" + result.ToString());
+                        return false;
+                    }
+                }
             }
-            
+
             return true;
-        }
-
-        public static bool IsDHCPEnabled(ManagementObject networkIf)
-        {
-            RegistryKey ipReg = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\" + networkIf["GUID"].ToString());
-            var dhcpStatus = ipReg.GetValue("EnableDHCP");
-            if (dhcpStatus != null)
-            {
-                if ((int)dhcpStatus == 1)
-                    return true;
-            }
-
-            return false;
-        }
-
-        public static void setDHCPEnabled(ManagementObject networkIf, bool enable)
-        {
-            RegistryKey ipReg = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\" + networkIf["GUID"].ToString(), true);
-            ipReg.SetValue("EnableDHCP", enable ? 1 : 0, RegistryValueKind.DWord);
         }
     }
 }

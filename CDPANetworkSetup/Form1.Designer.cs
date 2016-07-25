@@ -104,6 +104,7 @@
             this.textBoxNameServerSlave.Name = "textBoxNameServerSlave";
             this.textBoxNameServerSlave.Size = new System.Drawing.Size(109, 22);
             this.textBoxNameServerSlave.TabIndex = 20;
+            this.textBoxNameServerSlave.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxesInIPSetup_KeyPress);
             // 
             // textBoxNameServerMaster
             // 
@@ -111,6 +112,7 @@
             this.textBoxNameServerMaster.Name = "textBoxNameServerMaster";
             this.textBoxNameServerMaster.Size = new System.Drawing.Size(109, 22);
             this.textBoxNameServerMaster.TabIndex = 19;
+            this.textBoxNameServerMaster.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxesInIPSetup_KeyPress);
             // 
             // textBoxDefaultGateway
             // 
@@ -118,6 +120,7 @@
             this.textBoxDefaultGateway.Name = "textBoxDefaultGateway";
             this.textBoxDefaultGateway.Size = new System.Drawing.Size(142, 22);
             this.textBoxDefaultGateway.TabIndex = 18;
+            this.textBoxDefaultGateway.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxesInIPSetup_KeyPress);
             // 
             // textBoxSubnetMask
             // 
@@ -125,6 +128,7 @@
             this.textBoxSubnetMask.Name = "textBoxSubnetMask";
             this.textBoxSubnetMask.Size = new System.Drawing.Size(142, 22);
             this.textBoxSubnetMask.TabIndex = 17;
+            this.textBoxSubnetMask.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxesInIPSetup_KeyPress);
             // 
             // textBoxIPAddress
             // 
@@ -132,6 +136,7 @@
             this.textBoxIPAddress.Name = "textBoxIPAddress";
             this.textBoxIPAddress.Size = new System.Drawing.Size(142, 22);
             this.textBoxIPAddress.TabIndex = 16;
+            this.textBoxIPAddress.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxesInIPSetup_KeyPress);
             // 
             // labelNSSlave
             // 
