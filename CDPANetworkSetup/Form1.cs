@@ -272,6 +272,14 @@ namespace CDPANetworkSetup
                 return;
             }
 
+            if ((settings["IPAddress"] == "") ^ (settings["SubnetMask"] == ""))
+            {
+                MessageBox.Show("IP 位址與子網路遮罩可以同時留空，或皆有設定值，\r\n" +
+                                "但不可只留其中一個為空", "輸入錯誤", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                setStatus("IP 位址與子網路遮罩不可只留其中一個為空");
+                return;
+            }
+
             var confirmMsg = "";
 
             if (hasValueNA)
