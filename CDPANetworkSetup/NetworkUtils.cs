@@ -111,7 +111,7 @@ namespace CDPANetworkSetup
                 }
 
                 var ns = settings["NameServer"].Split(',');
-                if (IsValidIP(ns[0]) && IsValidIP(ns[1]))
+                if (IsValidIP(ns[0]) && (ns.Length == 1 || IsValidIP(ns[1])))
                 {
                     var result = ifConfObj.InvokeMethod("SetDNSServerSearchOrder", new object[1] { ns });
                     if ((uint)result != 0)
