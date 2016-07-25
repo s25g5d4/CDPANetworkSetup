@@ -54,6 +54,7 @@
             this.labelRoomBed = new System.Windows.Forms.Label();
             this.labelDorm = new System.Windows.Forms.Label();
             this.listBoxDorm = new System.Windows.Forms.ListBox();
+            this.buttonEnableDHCP = new System.Windows.Forms.Button();
             this.groupBoxSetupIP.SuspendLayout();
             this.groupBoxLookupIP.SuspendLayout();
             this.SuspendLayout();
@@ -79,6 +80,7 @@
             // 
             // groupBoxSetupIP
             // 
+            this.groupBoxSetupIP.Controls.Add(this.buttonEnableDHCP);
             this.groupBoxSetupIP.Controls.Add(this.textBoxNameServerSlave);
             this.groupBoxSetupIP.Controls.Add(this.textBoxNameServerMaster);
             this.groupBoxSetupIP.Controls.Add(this.textBoxDefaultGateway);
@@ -324,6 +326,16 @@
             this.listBoxDorm.TabIndex = 0;
             this.listBoxDorm.SelectedIndexChanged += new System.EventHandler(this.listBoxDorm_SelectedIndexChanged);
             // 
+            // buttonEnableDHCP
+            // 
+            this.buttonEnableDHCP.Location = new System.Drawing.Point(6, 147);
+            this.buttonEnableDHCP.Name = "buttonEnableDHCP";
+            this.buttonEnableDHCP.Size = new System.Drawing.Size(75, 23);
+            this.buttonEnableDHCP.TabIndex = 21;
+            this.buttonEnableDHCP.Text = "設為 DHCP";
+            this.buttonEnableDHCP.UseVisualStyleBackColor = true;
+            this.buttonEnableDHCP.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -375,6 +387,7 @@
         private System.Windows.Forms.ListBox listBoxDorm;
         private System.Windows.Forms.MaskedTextBox maskedTextBoxBedNum;
         private System.Windows.Forms.MaskedTextBox maskedTextBoxRoomNum;
+        private System.Windows.Forms.Button buttonEnableDHCP;
     }
 }
 

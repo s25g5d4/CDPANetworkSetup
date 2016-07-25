@@ -336,5 +336,26 @@ namespace CDPANetworkSetup
                 e.Handled = true;
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var confirm = MessageBox.Show("設為 DHCP 後將會自動從伺服器取得 IP，但無法於宿舍中使用\r\n" +
+                                         "此功能僅適用於使用 IP 分享器或路由器的使用者！\r\n" +
+                                         "是否設為 DHCP？", "設為 DHCP", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+            if (confirm == DialogResult.Yes)
+            {
+                var result = NetworkUtils.EnableDHCP(ifInfo[comboBoxInterfaces.SelectedIndex]);
+                if (result)
+                {
+                    UpdateIPSetupField();
+                    setStatus("啟用 DHCP 成功");
+                }
+                else
+                {
+                    setStatus("啟用 DHCP 失敗");
+                }
+            }
+        }
     }
 }

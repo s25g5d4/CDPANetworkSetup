@@ -124,5 +124,26 @@ namespace CDPANetworkSetup
 
             return true;
         }
+
+        public static bool EnableDHCP(ManagementObject networkIf)
+        {
+            var wqlQuery = new WqlObjectQuery("SELECT * FROM win32_NetworkAdapterConfiguration WHERE InterfaceIndex=" + networkIf["InterfaceIndex"]);
+            var ifCollection = (new ManagementObjectSearcher(wqlQuery)).Get();
+            if (ifCollection.Count != 1)
+            {
+                return false;
+            }
+
+            foreach (ManagementObject ifConfObj in ifCollection)
+            {
+                var result = ifConfObj.InvokeMethod("EnableDHCP", new object[0] { });
+                if ((uint)result != 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }
